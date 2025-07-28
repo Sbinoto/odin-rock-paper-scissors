@@ -1,60 +1,75 @@
 function getComputerChoice() {
-    let result = Math.floor(Math.random()*100 +1);
-    if (result>66){
-        result="ROCK"
-    }else if(result>33){
-        result="PAPER"
-    }else{
-        result="SCISSORS"
-    }
-    return result
-}
-function toNumbers(c){
-    switch (c){
-        case "ROCK":
+    let result = Math.floor(Math.random()*3);
+    switch (result){
+        case 2:
             return 3
-        case "PAPER":
+        case 1:
             return 2
-        default:
+        case 0:
             return 1
     }
 }
-function getHumanChoice(){
-    return prompt("Input rock, paper, or scissors").toUpperCase();
-}
-function playGame(){
-    let humanScore=0;
-    let computerScore=0;
-    function playRound(){
-    let hc=getHumanChoice();
-    let cc=getComputerChoice();
-    switch(toNumbers(hc)-toNumbers(cc)){
+function toWord(x){
+    switch (x){
+        case 3:
+            return "Rock"
         case 2:
-        case -1:
-            alert(`You win! ${hc} beats ${cc}`)
-            humanScore+=1
-            break
-        case 0:
-            alert("It's a tie!")
-            break
-        default:
-            alert(`You lose! ${cc} beats ${hc}`)
-            computerScore+=1
+            return "Paper"
+        case 1:
+            return "Scissors"
     }
 }
-    playRound()
-    playRound()
-    playRound()
-    playRound()
-    playRound()
-    if (humanScore>computerScore){
-        alert("You won!")
+
+const rock= document.querySelector("#rock")
+const paper= document.querySelector("#paper")
+const scissors= document.querySelector("#scissors")
+
+rock.addEventListener("click", playRound)
+paper.addEventListener("click", playRound )
+scissors.addEventListener("click", playRound)
+
+const humanScoreBoard= document.querySelector(".human")
+const computerScoreBoard= document.querySelector(".computer")
+
+let humanScore=0;
+let computerScore=0;
+
+function interpret(x){
+    switch (x.target.id){
+        case "rock":
+            return 3
+        case "paper":
+            return 2
+        case "scissors":
+            return 1
     }
-    else if (humanScore==computerScore){
+}
+
+function playRound(x){
+const hc=interpret(x);
+const cc=getComputerChoice();
+switch(hc-cc){
+    case 2:
+    case -1:
+        alert(`You win! ${toWord(hc)} beats ${toWord(cc)}`)
+        humanScore+=5
+        break
+    case 0:
         alert("It's a tie!")
-    }
-    else{
-        alert("You lost!")
-    }
+        break
+    default:
+        alert(`You lose! ${toWord(cc)} beats ${toWord(hc)}`)
+        computerScore+=1
+        break
 }
-playGame()
+if (computerScore==5){
+    [computerScore, humanScore]=[0,0]
+    alert('Computer wins, LOSER')
+}
+else if (humanScore==5){
+    [computerScore, humanScore]=[0,0]
+    alert('You win!')
+}
+humanScoreBoard.textContent=`Your Score: ${humanScore}`
+computerScoreBoard.textContent=`Computer's score: ${computerScore}`
+}
